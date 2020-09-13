@@ -10,11 +10,14 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-rl.question("Which city do you live ? ", function(city) {
-    const cityName = city || process.env.CITY_NAME;
-    callApi(cityName);
-    rl.close();
-});
+function askQuestion (){
+    rl.question(clc.yellow("Enter city name to get weather?"), function(city) {
+        const cityName = city || process.env.CITY_NAME;
+        callApi(cityName);
+    });
+}
+   
+askQuestion();
 
 const API_KEY = process.env.API_KEY;
 
@@ -39,6 +42,10 @@ function callApi(CITY_NAME){
         );
 
         console.log(clc.blue(message));
+        askQuestion();
     })
-    .catch(error => console.log('Error', error));
+    .catch(error => {
+        console.log('Please enter correct name!');
+        askQuestion();
+     });
 }
